@@ -28,12 +28,8 @@
                     <assembleDirectory>target</assembleDirectory>
                     <programs>
                         <program>
-                            <mainClass>WorkerProcess</mainClass>
+                            <mainClass>DialyWorker</mainClass>
                             <name>worker</name>
-                        </program>
-                        <program>
-                            <mainClass>OneOffProcess</mainClass>
-                            <name>oneoff</name>
                         </program>
                     </programs>
                 </configuration>
