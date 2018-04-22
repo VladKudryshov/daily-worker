@@ -11,7 +11,7 @@ public class DialyWorker {
     public static void main(String[] args) throws Exception{
 
         FileInputStream serviceAccount =
-                new FileInputStream("serviceAccountKey.json");
+                new FileInputStream("shooplists-firebase-adminsdk-8k2xu-a08474bc41.json");
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
