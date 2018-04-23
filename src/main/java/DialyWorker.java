@@ -30,7 +30,7 @@ public class DialyWorker {
             try {
                 getUsers();
                 Thread.sleep(1000 * 10);
-                Map<String, List<ProductInfoModel>> smartLists = new HashMap<>();
+                Map<String, List<SmartListModel>> smartLists = new HashMap<>();
                 for (Map.Entry<String, List<ProductInfoModel>> user : lists.entrySet()) {
                     Map<String, List<Long>> collect = user.getValue()
                             .stream()
@@ -53,7 +53,7 @@ public class DialyWorker {
                         }
                         peroiod.stream().mapToDouble(a -> a).average().ifPresent(f -> items.put(item.getKey(), Math.ceil(f)));
                     }
-                    List<ProductInfoModel> productInfoModels = new ArrayList<>();
+                    List<SmartListModel> productInfoModels = new ArrayList<>();
                     Calendar calendar = new GregorianCalendar();
                     Calendar now = new GregorianCalendar();
                     items.forEach((String key, Double value) -> {
@@ -61,9 +61,8 @@ public class DialyWorker {
                         int oldDay = calendar.get(Calendar.DAY_OF_YEAR);
                         int nowDay = now.get(Calendar.DAY_OF_YEAR);
                         if ((nowDay - oldDay) == value.intValue() && oldDay != nowDay) {
-                            ProductInfoModel productInfoModel = new ProductInfoModel();
-                            productInfoModel.setName(key);
-                            productInfoModel.setPaid(false);
+                            SmartListModel productInfoModel = new SmartListModel();
+                            productInfoModel.setTitleProduct(key);
                             productInfoModel.setQuantity(1);
                             productInfoModels.add(productInfoModel);
                         }
@@ -72,21 +71,7 @@ public class DialyWorker {
                 }
 
                 smartLists.forEach((uid,list)->{
-                    String docketsInfoUid = database.child("docketsInfo").push().getKey();
-                    String smartListsUid = database.child("smartLists").push().getKey();
-
-                    int quantity = list.stream().mapToInt(item -> item.getQuantity()).sum();
-
-                    database.child("docketsInfo").child(docketsInfoUid).setValue(list);
-                    SmartListModel model = new SmartListModel();
-                    model.setDocketName("Smart List");
-                    model.setUid(smartListsUid);
-                    model.setDocketInfoUid(docketsInfoUid);
-                    model.setQuantity(quantity);
-                    HashMap<String, Boolean> user = new HashMap<>();
-                    user.put(uid,true);
-                    model.setUser(user);
-                    database.child("smartList").child(smartListsUid).setValue(model);
+                    database.child("smartList").child(uid).setValue(list);
                 });
 
                 Thread.sleep(1000 * 60 * 60 * 24);
